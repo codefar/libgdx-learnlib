@@ -85,6 +85,9 @@ public class Assets implements Disposable, AssetErrorListener {
     @Override
     public void dispose() {
         assetManager.dispose();
+        fonts.defaultBig.dispose();
+        fonts.defaultNormal.dispose();
+        fonts.defaultSmall.dispose();
     }
 
     public class AssetFonts {
@@ -99,9 +102,9 @@ public class Assets implements Disposable, AssetErrorListener {
             defaultBig = new BitmapFont(Gdx.files.internal("images/arial-15.fnt"), true);
 
             // set font sizes
-//            defaultSmall.setScale(0.75f);
-//            defaultNormal.setScale(1.0f);
-//            defaultBig.setScale(2.0f);
+            defaultSmall.getData().setScale(0.75f);
+            defaultNormal.getData().setScale(1.0f);
+            defaultBig.getData().setScale(2.0f);
 
             // enable linear texture filtering for smooth fonts
             defaultSmall.getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
