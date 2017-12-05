@@ -6,9 +6,10 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 
 import davy.mygdx.game.utils.CameraHelper;
 
@@ -104,14 +105,21 @@ public class WorldController extends InputAdapter {
     private void initTestSprites() {
         testSprites = new Sprite[5];
 
-        int width = 32;
-        int height = 32;
-        Pixmap pixmap = createProceduralPixmap(width, height);
-        Texture texture = new Texture(pixmap);
+        //创建一个TextureRegion列表
+        Array<TextureRegion> regions = new Array<TextureRegion>();
+        regions.add(Assets.instance.bunny.head);
+        regions.add(Assets.instance.feather.feather);
+        regions.add(Assets.instance.goldCoin.goldCoin);
+
+//        int width = 32;
+//        int height = 32;
+//        Pixmap pixmap = createProceduralPixmap(width, height);
+//        Texture texture = new Texture(pixmap);
 
         //使用文理数组创建精灵
         for (int i = 0; i < testSprites.length; i++) {
-            Sprite sprite = new Sprite(texture);
+            //Sprite sprite = new Sprite(texture);
+            Sprite sprite = new Sprite(regions.random());
             sprite.setSize(1, 1);
             //设置精灵的原点设置为中心
             sprite.setOrigin(sprite.getWidth() / 2.0f, sprite.getHeight() / 2.0f);

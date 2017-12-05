@@ -3,8 +3,10 @@ package davy.mygdx.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 
+import davy.mygdx.game.game.Assets;
 import davy.mygdx.game.game.WorldController;
 import davy.mygdx.game.game.WorldRenderer;
 
@@ -20,6 +22,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void create () {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        Assets.instance.init(new AssetManager());
+
 		worldController = new WorldController();
 		worldRenderer = new WorldRenderer(worldController);
         paused = false;
@@ -43,7 +47,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
     @Override
     public void resume() {
-        super.resume();
+        Assets.instance.init(new AssetManager());
         paused = false;
     }
 
@@ -56,5 +60,6 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
 	public void dispose () {
         worldRenderer.dispose();
+        Assets.instance.dispose();
 	}
 }
