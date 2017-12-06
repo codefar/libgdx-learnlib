@@ -32,6 +32,7 @@ public class Rock extends AbstractGameObject {
 
     public void setLength(int length) {
         this.length = length;
+        bounds.set(0, 0, dimension.x * length, dimension.y);
     }
 
     public void increaseLength(int amount) {

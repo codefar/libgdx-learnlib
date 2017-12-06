@@ -25,4 +25,9 @@ public class Constants {
     // 玩家初始生命值
     public static final int LIVES_START = 3;
 
+    //飞行持续时间
+    public static final float ITEM_FEATHER_POWERUP_DURATION = 9;
+
+
+
 }

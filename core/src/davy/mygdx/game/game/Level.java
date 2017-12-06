@@ -6,7 +6,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
 import davy.mygdx.game.objects.AbstractGameObject;
+import davy.mygdx.game.objects.BunnyHead;
 import davy.mygdx.game.objects.Clouds;
+import davy.mygdx.game.objects.Feather;
+import davy.mygdx.game.objects.GoldCoin;
 import davy.mygdx.game.objects.Mountains;
 import davy.mygdx.game.objects.Rock;
 import davy.mygdx.game.objects.WaterOverlay;
@@ -51,13 +54,22 @@ public class Level {
     public Mountains mountains;
     public WaterOverlay waterOverlay;
 
+    public BunnyHead bunnyHead;
+    public Array<GoldCoin> goldCoins;
+    public Array<Feather> feathers;
+
+
     public Level(String filename) {
         init(filename);
     }
 
     private void init(String filename) {
+
+        bunnyHead = null;
         // 游戏石头对象
         rocks = new Array<Rock>();
+        goldCoins = new Array<GoldCoin>();
+        feathers = new Array<Feather>();
 
         // 加载关卡图片
         Pixmap pixmap = new Pixmap(Gdx.files.internal(filename));
@@ -88,6 +100,28 @@ public class Level {
                         rocks.get(rocks.size - 1).increaseLength(1);
                     }
                 }
+                // 玩家初始位置
+                else if(BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel)) {
+                    obj = new BunnyHead();
+                    offsetHeight = -3.0f;
+                    obj.position.set(pixelX, baseHeight*obj.dimension.y+offsetHeight);
+                    bunnyHead = (BunnyHead)obj;
+                }
+                // 羽毛
+                else if(BLOCK_TYPE.ITEM_FEATHER.sameColor(currentPixel)) {
+                    obj = new Feather();
+                    offsetHeight = -1.5f;
+                    obj.position.set(pixelX, baseHeight*obj.dimension.y+offsetHeight);
+                    feathers.add((Feather)obj);
+                }
+                // 金币
+                else if(BLOCK_TYPE.ITEM_GOLD_COIN.sameColor(currentPixel)) {
+                    obj = new GoldCoin();
+                    offsetHeight = -1.5f;
+                    obj.position.set(pixelX, baseHeight*obj.dimension.y+offsetHeight);
+                    goldCoins.add((GoldCoin)obj);
+                }
+
                 // unknown object/pixel color
                 else {
                     int r = 0xff & (currentPixel >>> 24); // red channel
@@ -114,6 +148,15 @@ public class Level {
     }
 
     public void update(float deltaTime) {
+        bunnyHead.update(deltaTime);
+
+        for(Rock rock : rocks)
+            rock.update(deltaTime);
+        for(GoldCoin goldCoin : goldCoins)
+            goldCoin.update(deltaTime);
+        for(Feather feather : feathers)
+            feather.update(deltaTime);
+
         clouds.update(deltaTime);
     }
 
@@ -125,6 +168,19 @@ public class Level {
         for (int i = 0; i < rocks.size; ++i) {
             rocks.get(i).render(batch);
         }
+
+        //渲染金币
+        for (GoldCoin goldcoin : goldCoins) {
+            goldcoin.render(batch);
+        }
+
+        //渲染羽毛
+        for (Feather feather : feathers) {
+            feather.render(batch);
+        }
+
+        //渲染玩家
+        bunnyHead.render(batch);
 
         // 渲染水
         waterOverlay.render(batch);
